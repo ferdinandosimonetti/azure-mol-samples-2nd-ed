@@ -8,11 +8,16 @@
 # This script sample is released under the MIT license. For more information,
 # see https://github.com/fouldsy/azure-mol-samples-2nd-ed/blob/master/LICENSE
 
-import string,random,time,azurerm,json,subprocess
+import string,random,time,azurerm,json,subprocess,platform
 from azure.storage.queue import QueueService
 
 # Define variables to handle Azure authentication
-get_token = subprocess.run(['az account get-access-token | jq  -r .accessToken'], stdout=subprocess.PIPE, shell=True)
+# Define variables to handle Azure authentication
+if platform.system() == "Linux":
+    get_token = subprocess.run(['az account get-access-token | jq  -r .accessToken'], stdout=subprocess.PIPE, shell=True)
+else:
+    get_token = subprocess.run(['.\getaccesstoken.bat'], stdout=subprocess.PIPE, shell=True)
+
 auth_token = get_token.stdout.decode('utf8').rstrip()
 subscription_id = azurerm.get_subscription_from_cli()
 
