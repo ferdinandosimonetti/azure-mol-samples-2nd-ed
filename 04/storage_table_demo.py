@@ -96,12 +96,17 @@ while True:
         break
     pizza = Entity()
     pizza.PartitionKey = 'pizzamenu'
-    pizza.RowKey = pizzarowkey
+    pizza.RowKey = str(pizzarowkey).zfill(3)
     pizza.description = pizzadescription
     pizza.cost = pizzacost
-    table_service.insert_entity('pizzatable', pizza)
-    print('Created entry for ' + pizzadescription + '...')
-
+    try:
+        table_service.insert_entity('pizzatable', pizza)
+        print('Created entry for ' + pizzadescription + '...')
+    except Exception as e:
+        print("Exception is: " + str(e))
+        break
+    pizzarowkey = pizzarowkey + 1
+    
 time.sleep(1)
 
 
